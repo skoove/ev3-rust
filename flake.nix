@@ -33,7 +33,6 @@
         lld
         pkg-config
         rustup
-        buildPackages.gccCrossMuslArmv6
       ] ++ librarys;
 
       LD_LIBRARY_PATH = "${pkgs.lib.makeLibraryPath librarys}";
