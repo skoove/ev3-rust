@@ -33,6 +33,8 @@
         lld
         pkg-config
         rustup
+        gnumake
+        cargo-cross
       ] ++ librarys;
 
       LD_LIBRARY_PATH = "${pkgs.lib.makeLibraryPath librarys}";
