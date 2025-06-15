@@ -37,6 +37,14 @@
         cargo-cross
       ] ++ librarys;
 
+      shellHook = ''
+        echo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        echo 
+        echo "docker pull pixix4/ev3dev-rust:latest"
+        echo 
+        echo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      '';
+
       LD_LIBRARY_PATH = "${pkgs.lib.makeLibraryPath librarys}";
     };
   };
