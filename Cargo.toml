@@ -4,4 +4,9 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-ev3dev-lang-rust = { version="0.15", default-features=false, features=["ev3"]}
+ev3dev-lang-rust = { version="0.15", default-features=true, features=["ev3"]}
+
+[profile.release]
+lto = true
+strip = true
+opt-level = "s"

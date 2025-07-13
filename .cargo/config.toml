@@ -1,11 +1,11 @@
-[build]
-target = "armv5te-unknown-linux-gnueabi"
+[source.vendored-sources]
+directory = "vendor"
+
+[target.armv5te-unknown-linux-musleabi]
+linker = "rust-lld"
 
 [target.armv5te-unknown-linux-gnueabi]
 linker = "/usr/bin/arm-linux-gnueabi-gcc"
 
-[source.crates-io]
-replace-with = "vendored-sources"
-
-[source.vendored-sources]
-directory = "vendor"
+[registries.crates-io]
+protocol = "sparse"
