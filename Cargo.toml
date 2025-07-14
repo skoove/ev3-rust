@@ -4,7 +4,9 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+env_logger = "0.11.8"
 ev3dev-lang-rust = { version="0.15", default-features=true, features=["ev3"]}
+log = "0.4.27"
 
 [profile.release]
 lto = true
