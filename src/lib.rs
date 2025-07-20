@@ -50,6 +50,10 @@ impl RobotState {
         &mut self,
         peripherals: &mut Peripherals,
     ) -> Result<(), ev3dev_lang_rust::Ev3Error> {
+        if self.move_state == MoveState::Stop {
+            return Ok(());
+        }
+
         info!("stop");
         self.move_state = MoveState::Stop;
         peripherals.drive.set_duty_cycle_sp(0)
@@ -59,6 +63,10 @@ impl RobotState {
         &mut self,
         peripherals: &mut Peripherals,
     ) -> Result<(), ev3dev_lang_rust::Ev3Error> {
+        if self.move_state == MoveState::Forwards {
+            return Ok(());
+        }
+
         info!("moving forwards");
         if self.move_state == MoveState::Stop {
             self.move_state = MoveState::Forwards;
@@ -79,6 +87,10 @@ impl RobotState {
         peripherals: &mut Peripherals,
     ) -> Result<(), ev3dev_lang_rust::Ev3Error> {
         info!("moving backwards");
+        if self.move_state == MoveState::Backwards {
+            return Ok(());
+        }
+
         if self.move_state == MoveState::Stop {
             self.move_state = MoveState::Backwards;
             peripherals.drive.set_duty_cycle_sp(100)?
