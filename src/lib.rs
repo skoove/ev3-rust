@@ -35,7 +35,6 @@ pub struct RobotState {
 #[derive(Default, Clone, Copy, Debug)]
 struct SensorData {
     angle: i32,
-    touching_something: bool,
     distance: i32,
 }
 
