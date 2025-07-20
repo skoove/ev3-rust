@@ -36,21 +36,12 @@ fn main() -> Result<(), Ev3Error> {
         gyroscope: GyroSensor::find().expect("failed to find gyroscope, or there is more than one"),
         ultrasonic: UltrasonicSensor::find()
             .expect("failed to find ultrasonic sensor, or there is more than one"),
+        led: Led::new()?,
     };
 
     let mut robot = RobotState::default();
-    let led = Led::new()?;
 
     peripherals.drive.run_direct()?;
-
-    // gyro cal (i think)
-    led.set_color(Led::COLOR_RED)?;
-    info!("gyroscope calibration");
-    peripherals.gyroscope.set_mode_gyro_cal()?;
-    sleep(Duration::from_secs(1));
-    peripherals.gyroscope.set_mode_gyro_ang()?;
-    led.set_color(Led::COLOR_GREEN)?;
-    info!("gyroscope calibration done");
 
     robot.forwards(&mut peripherals)?;
 

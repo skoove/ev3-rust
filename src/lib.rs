@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-use ev3dev_lang_rust::{motors, sensors, Ev3Error};
+use ev3dev_lang_rust::{motors, sensors, Ev3Error, Led};
 use log::info;
 use std::{thread::sleep, time::Duration};
 
@@ -42,6 +42,7 @@ pub struct Peripherals {
     pub drive: motors::LargeMotor,
     pub gyroscope: sensors::GyroSensor,
     pub ultrasonic: sensors::UltrasonicSensor,
+    pub led: Led,
 }
 
 impl RobotState {
@@ -94,6 +95,22 @@ impl RobotState {
 
     pub fn update_sensor_data(&mut self, peripherals: &Peripherals) -> Result<(), Ev3Error> {
         self.sensor_data.angle = peripherals.gyroscope.get_angle()?;
+        Ok(())
+    }
+
+    /// Calibartes gyroscope
+    /// Sets led to red, sets the gyro to cal mode then sleeps for a second,
+    /// then turns LED green again and reutrns Ok(())
+    pub fn calibrate_gyroscope(peripherals: &mut Peripherals) -> Result<(), Ev3Error> {
+        peripherals.led.set_color(Led::COLOR_RED)?;
+        info!("gyroscope calibration begin");
+
+        peripherals.gyroscope.set_mode_gyro_cal()?;
+        sleep(Duration::from_secs(1));
+        peripherals.gyroscope.set_mode_gyro_ang()?;
+
+        peripherals.led.set_color(Led::COLOR_GREEN)?;
+        info!("gyroscope calibration done");
         Ok(())
     }
 }
