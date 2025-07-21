@@ -2,7 +2,7 @@
 ARTIFACT := ev3-rust
 
 # Replace this with your ssh configuration for the robot like `robot@192.168.2.3`
-TARGET := robot@192.168.8.157
+TARGET := robot@192.168.107.157
 
 all: build
 
