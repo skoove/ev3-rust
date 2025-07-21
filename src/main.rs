@@ -19,7 +19,7 @@ use std::{thread::sleep, time::Duration};
 use env_logger::Env;
 use ev3_rust::{Peripherals, RobotState};
 use ev3dev_lang_rust::{
-    motors::{LargeMotor, MotorPort},
+    motors::LargeMotor,
     sensors::{GyroSensor, UltrasonicSensor},
     Ev3Error, Led,
 };
@@ -41,8 +41,8 @@ fn main() -> Result<(), Ev3Error> {
 
     let mut robot = RobotState::default();
 
-    peripherals.drive.run_direct()?;
-
+    robot.setup(&mut peripherals)?;
+    peripherals.calibrate_gyroscope()?;
     robot.forwards(&mut peripherals)?;
 
     loop {

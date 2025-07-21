@@ -35,7 +35,7 @@ pub struct RobotState {
 #[derive(Default, Clone, Copy, Debug)]
 struct SensorData {
     angle: i32,
-    distance: i32,
+    distance: f32,
 }
 
 pub struct Peripherals {
@@ -43,6 +43,24 @@ pub struct Peripherals {
     pub gyroscope: sensors::GyroSensor,
     pub ultrasonic: sensors::UltrasonicSensor,
     pub led: Led,
+}
+
+impl Peripherals {
+    /// Calibartes gyroscope
+    /// Sets led to red, sets the gyro to cal mode then sleeps for a second,
+    /// then turns LED green again and reutrns Ok(())
+    pub fn calibrate_gyroscope(&mut self) -> Result<(), Ev3Error> {
+        self.led.set_color(Led::COLOR_RED)?;
+        info!("gyroscope calibration begin");
+
+        self.gyroscope.set_mode_gyro_cal()?;
+        sleep(Duration::from_secs(1));
+        self.gyroscope.set_mode_gyro_ang()?;
+
+        self.led.set_color(Led::COLOR_GREEN)?;
+        info!("gyroscope calibration done");
+        Ok(())
+    }
 }
 
 impl RobotState {
@@ -107,22 +125,13 @@ impl RobotState {
 
     pub fn update_sensor_data(&mut self, peripherals: &Peripherals) -> Result<(), Ev3Error> {
         self.sensor_data.angle = peripherals.gyroscope.get_angle()?;
+        self.sensor_data.distance = peripherals.ultrasonic.get_distance_centimeters()?;
         Ok(())
     }
 
-    /// Calibartes gyroscope
-    /// Sets led to red, sets the gyro to cal mode then sleeps for a second,
-    /// then turns LED green again and reutrns Ok(())
-    pub fn calibrate_gyroscope(peripherals: &mut Peripherals) -> Result<(), Ev3Error> {
-        peripherals.led.set_color(Led::COLOR_RED)?;
-        info!("gyroscope calibration begin");
-
-        peripherals.gyroscope.set_mode_gyro_cal()?;
-        sleep(Duration::from_secs(1));
-        peripherals.gyroscope.set_mode_gyro_ang()?;
-
-        peripherals.led.set_color(Led::COLOR_GREEN)?;
-        info!("gyroscope calibration done");
+    pub fn setup(&mut self, peripherals: &mut Peripherals) -> Result<(), Ev3Error> {
+        peripherals.drive.run_direct()?;
+        peripherals.ultrasonic.set_mode_us_dist_cm()?;
         Ok(())
     }
 }
