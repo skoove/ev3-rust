@@ -29,13 +29,13 @@ pub enum MoveState {
 #[derive(Default, Clone, Copy, Debug)]
 pub struct RobotState {
     move_state: MoveState,
-    sensor_data: SensorData,
+    pub sensor_data: SensorData,
 }
 
 #[derive(Default, Clone, Copy, Debug)]
-struct SensorData {
-    angle: i32,
-    distance: f32,
+pub struct SensorData {
+    pub angle: i32,
+    pub distance: f32,
 }
 
 pub struct Peripherals {

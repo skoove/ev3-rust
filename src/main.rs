@@ -14,8 +14,6 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::{thread::sleep, time::Duration};
-
 use env_logger::Env;
 use ev3_rust::{Peripherals, RobotState};
 use ev3dev_lang_rust::{
@@ -47,7 +45,15 @@ fn main() -> Result<(), Ev3Error> {
 
     loop {
         robot.update_sensor_data(&peripherals)?;
-        dbg!(robot);
-        sleep(Duration::from_millis(500));
+
+        while robot.sensor_data.angle >= 35 {
+            robot.stop(&mut peripherals)?;
+        }
+
+        while robot.sensor_data.distance <= 10.0 {
+            robot.stop(&mut peripherals)?;
+        }
+
+        robot.forwards(&mut peripherals)?;
     }
 }
